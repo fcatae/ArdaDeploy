@@ -1,0 +1,31 @@
+version: '2.1'
+services:
+  ardamain:
+     image: ardafull-demo
+     command: run.cmd Arda.Main
+     ports:
+        - "80:80"
+        - "443:443"
+     depends_on:
+        - kanban
+        - permissions
+        - reports
+  kanban:
+     image: ardafull-demo
+     command: run.cmd Arda.Kanban
+     ports:
+        - "81:81"     
+  permissions:
+     image: ardafull-demo
+     command: run.cmd Arda.Permissions
+     ports:
+        - "82:82"     
+  reports:
+     image: ardafull-demo
+     command: run.cmd Arda.Reports
+     ports:
+        - "83:83"     
+networks:
+  default:
+    external:
+      name: nat
