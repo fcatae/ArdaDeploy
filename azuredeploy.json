@@ -17,8 +17,8 @@
     },
     "variables": {
         "vmName": "ardahost",
-        "templateVM": "",
-        "templateSetupDocker": ""
+        "templateVM": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/vm.json",
+        "templateSetupDocker": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/vmext.json"
     },
     "resources": [
       {
