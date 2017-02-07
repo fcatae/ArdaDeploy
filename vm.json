@@ -212,7 +212,7 @@
     "outputs": {
         "website": {
             "type": "string",            
-            "value": "[resourceId('Microsoft.Network/publicIPAddresses', 'ardahost-nic-ip').dnsSettings.fqdn]"
+            "value": "[reference('ardahost-nic-ip').dnsSettings.fqdn]"
         }
     }
 }
