@@ -46,6 +46,7 @@
                   }                  
                 }
           }
+        
       },
       {
             "name": "setupdocker",
@@ -71,7 +72,7 @@
     "outputs": {
         "website": {
             "type": "string",            
-            "value": "[concat('http://',parameters('siteAddress'),'.',resourceGroup().location,'.','cloudapp.azure.com')]"
+            "value": "[reference('vm').outputs.website]"
         }
     }
 }
