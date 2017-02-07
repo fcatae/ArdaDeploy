@@ -2,6 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "adminUsername": {
+            "defaultValue": null,
+            "type": "String"
+        },
         "adminPassword": {
             "defaultValue": null,
             "type": "SecureString"
@@ -43,7 +47,7 @@
                 },
                 "osProfile": {
                     "computerName": "ardahost",
-                    "adminUsername": "ardaadmin",
+                    "adminUsername": "[parameters('adminUsername')]",
                     "windowsConfiguration": {
                         "provisionVMAgent": true,
                         "enableAutomaticUpdates": true
