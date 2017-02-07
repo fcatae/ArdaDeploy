@@ -30,6 +30,10 @@
             "defaultValue": "ardademodiag618",
             "type": "String"
         },
+        "tdocker": {
+            "defaultValue": "tdocker2",
+            "type": "String"
+        },
         "storageAccounts_ardademodisks376_name": {
             "defaultValue": "ardademodisks376",
             "type": "String"
@@ -39,9 +43,9 @@
     "resources": [
         {
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('virtualMachines_ardahost_name')]",
+            "name": "ardahost",
             "apiVersion": "2015-06-15",
-            "location": "southcentralus",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_DS1_v2"
@@ -54,18 +58,18 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "[parameters('virtualMachines_ardahost_name')]",
+                        "name": "ardahost-diskos",
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat('https', '://', parameters('storageAccounts_ardademodisks376_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_ardahost_name'),'20170203082232.vhd'))]"
+                            "uri": "[concat('https', '://', parameters('storageAccounts_ardademodisks376_name'), '.blob.core.windows.net', concat('/vhds/ardahost-diskos.vhd'))]"
                         },
                         "caching": "ReadWrite"
                     },
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachines_ardahost_name')]",
-                    "adminUsername": "fabricio",
+                    "computerName": "ardahost",
+                    "adminUsername": "ardaadmin",
                     "windowsConfiguration": {
                         "provisionVMAgent": true,
                         "enableAutomaticUpdates": true
@@ -88,11 +92,10 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ArdaDemo/providers/Microsoft.Network/networkInterfaces/ardahost13'.",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[parameters('networkInterfaces_ardahost13_name')]",
             "apiVersion": "2016-03-30",
-            "location": "southcentralus",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "ipConfigurations": [
                     {
@@ -125,11 +128,10 @@
             ]
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ArdaDemo/providers/Microsoft.Network/networkSecurityGroups/ardahost-nsg'.",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[parameters('networkSecurityGroups_ardahost_nsg_name')]",
             "apiVersion": "2016-03-30",
-            "location": "southcentralus",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
                     {
@@ -177,27 +179,25 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ArdaDemo/providers/Microsoft.Network/publicIPAddresses/ardahost-ip'.",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[parameters('publicIPAddresses_ardahost_ip_name')]",
             "apiVersion": "2016-03-30",
-            "location": "southcentralus",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4,
                 "dnsSettings": {
-                    "domainNameLabel": "tdocker"
+                    "domainNameLabel": "[parameters('tdocker')]"
                 }
             },
             "resources": [],
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ArdaDemo/providers/Microsoft.Network/virtualNetworks/ArdaDemo-vnet'.",
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[parameters('virtualNetworks_ArdaDemo_vnet_name')]",
             "apiVersion": "2016-03-30",
-            "location": "southcentralus",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -208,7 +208,7 @@
                     {
                         "name": "default",
                         "properties": {
-                            "addressPrefix": "10.0.1.0/24"
+                            "addressPrefix": "10.0.1.0/28"
                         }
                     }
                 ]
@@ -217,23 +217,6 @@
             "dependsOn": []
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ardademo/providers/Microsoft.Storage/storageAccounts/ardademodiag618'.",
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "name": "[parameters('storageAccounts_ardademodiag618_name')]",
-            "apiVersion": "2016-01-01",
-            "location": "southcentralus",
-            "tags": {},
-            "properties": {},
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ardademo/providers/Microsoft.Storage/storageAccounts/ardademodisks376'.",
             "type": "Microsoft.Storage/storageAccounts",
             "sku": {
                 "name": "Premium_LRS",
@@ -242,7 +225,7 @@
             "kind": "Storage",
             "name": "[parameters('storageAccounts_ardademodisks376_name')]",
             "apiVersion": "2016-01-01",
-            "location": "southcentralus",
+            "location": "[resourceGroup().location]",
             "tags": {},
             "properties": {},
             "resources": [],
