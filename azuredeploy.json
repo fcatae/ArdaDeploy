@@ -11,31 +11,32 @@
             "type": "String"
         },
         "networkInterfaces_ardahost13_name": {
-            "defaultValue": "ardahost13",
+            "defaultValue": "ardahost-nic",
             "type": "String"
         },
         "networkSecurityGroups_ardahost_nsg_name": {
-            "defaultValue": "ardahost-nsg",
+            "defaultValue": "ardahost-nic-nsg",
             "type": "String"
         },
         "publicIPAddresses_ardahost_ip_name": {
-            "defaultValue": "ardahost-ip",
+            "defaultValue": "ardahost-nic-ip",
             "type": "String"
         },
         "virtualNetworks_ArdaDemo_vnet_name": {
-            "defaultValue": "ArdaDemo-vnet",
+            "defaultValue": "vnet",
             "type": "String"
         },
         "tdocker": {
             "defaultValue": "tdocker2",
             "type": "String"
-        },
+        }
+    },
+    "variables": {
         "storageAccounts_ardademodisks376_name": {
             "defaultValue": "ardademodisks376",
             "type": "String"
         }
     },
-    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Compute/virtualMachines",
@@ -57,7 +58,7 @@
                         "name": "ardahost-diskos",
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat('https', '://', parameters('storageAccounts_ardademodisks376_name'), '.blob.core.windows.net', concat('/vhds/ardahost-diskos.vhd'))]"
+                            "uri": "[concat('https://', variables('storageAccounts_ardademodisks376_name'), '.blob.core.windows.net/vhds/ardahost-diskos.vhd')]"
                         },
                         "caching": "ReadWrite"
                     },
@@ -76,14 +77,14 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ardahost13_name'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'ardahost-nic')]"
                         }
                     ]
                 }
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_ardademodisks376_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ardademodisks376_name'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ardahost13_name'))]"
             ]
         },
@@ -219,7 +220,7 @@
                 "tier": "Premium"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_ardademodisks376_name')]",
+            "name": "[variables('storageAccounts_ardademodisks376_name')]",
             "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
             "tags": {},
