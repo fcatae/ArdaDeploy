@@ -204,5 +204,11 @@
             "resources": [],
             "dependsOn": []
         }
-    ]
+    ],
+    "outputs": {
+        "website": {
+            "type": "string",            
+            "value": "[resourceId('Microsoft.Network/publicIPAddresses', 'ardahost-nic-ip').dnsSettings.fqdn]"
+        }
+    }
 }
