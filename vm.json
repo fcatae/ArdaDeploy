@@ -12,10 +12,7 @@
         }
     },
     "variables": {
-        "storageAccount": {
-            "defaultValue": "[concat( 'storage', uniqueString(resourceGroup().id) )]",
-            "type": "String"
-        }
+        "storageAccount": "[concat( 'storage', uniqueString(resourceGroup().id) )]"
     },
     "resources": [
         {
