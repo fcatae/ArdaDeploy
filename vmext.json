@@ -5,10 +5,6 @@
         "vmName": {
             "type": "string",
             "defaultValue": "ardahost"            
-        },
-        "location": {
-            "type": "string",
-            "defaultValue": "southcentralus"
         }
     },
     "variables": {
@@ -17,7 +13,7 @@
         {
             "name": "[concat(parameters('vmName'),'/CustomScriptExtension')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "location": "[parameters('location')]",
+            "location": "[resourceGroup().location]",
             "apiVersion": "2015-06-15",
             "properties": {
                 "publisher": "Microsoft.Compute",
