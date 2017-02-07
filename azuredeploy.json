@@ -72,7 +72,7 @@
     "outputs": {
         "website": {
             "type": "string",            
-            "value": "[reference('vm').outputs.website]"
+            "value": "[reference('vm').outputs.website.value]"
         }
     }
 }
