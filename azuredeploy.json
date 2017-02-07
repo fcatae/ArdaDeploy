@@ -26,10 +26,6 @@
             "defaultValue": "ArdaDemo-vnet",
             "type": "String"
         },
-        "storageAccounts_ardademodiag618_name": {
-            "defaultValue": "ardademodiag618",
-            "type": "String"
-        },
         "tdocker": {
             "defaultValue": "tdocker2",
             "type": "String"
