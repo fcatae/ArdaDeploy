@@ -2,38 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualMachines_ardahost_adminPassword": {
+        "adminPassword": {
             "defaultValue": null,
             "type": "SecureString"
         },
-        "virtualMachines_ardahost_name": {
-            "defaultValue": "ardahost",
-            "type": "String"
-        },
-        "networkInterfaces_ardahost13_name": {
-            "defaultValue": "ardahost-nic",
-            "type": "String"
-        },
-        "networkSecurityGroups_ardahost_nsg_name": {
-            "defaultValue": "ardahost-nic-nsg",
-            "type": "String"
-        },
-        "publicIPAddresses_ardahost_ip_name": {
-            "defaultValue": "ardahost-nic-ip",
-            "type": "String"
-        },
-        "virtualNetworks_ArdaDemo_vnet_name": {
-            "defaultValue": "vnet",
-            "type": "String"
-        },
-        "tdocker": {
-            "defaultValue": "tdocker2",
+        "siteAddress": {
+            "defaultValue": "siteAddress",
             "type": "String"
         }
     },
     "variables": {
-        "storageAccounts_ardademodisks376_name": {
-            "defaultValue": "ardademodisks376",
+        "storageAccount": {
+            "defaultValue": "[concat( 'storage', uniqueString(resourceGroup().id) )]",
             "type": "String"
         }
     },
@@ -58,7 +38,7 @@
                         "name": "ardahost-diskos",
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat('https://', variables('storageAccounts_ardademodisks376_name'), '.blob.core.windows.net/vhds/ardahost-diskos.vhd')]"
+                            "uri": "[concat('https://', variables('storageAccount'), '.blob.core.windows.net/vhds/ardahost-diskos.vhd')]"
                         },
                         "caching": "ReadWrite"
                     },
@@ -72,7 +52,7 @@
                         "enableAutomaticUpdates": true
                     },
                     "secrets": [],
-                    "adminPassword": "[parameters('virtualMachines_ardahost_adminPassword')]"
+                    "adminPassword": "[parameters('adminPassword')]"
                 },
                 "networkProfile": {
                     "networkInterfaces": [
@@ -84,13 +64,13 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_ardademodisks376_name'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_ardahost13_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccount'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', 'ardahost-nic')]"
             ]
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('networkInterfaces_ardahost13_name')]",
+            "name": "ardahost-nic",
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -98,13 +78,12 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIPAddress": "10.0.1.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_ardahost_ip_name'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'ardahost-nic-ip')]"
                             },
                             "subnet": {
-                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_ArdaDemo_vnet_name')), '/subnets/default')]"
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'vnet'), '/subnets/default')]"
                             }
                         }
                     }
@@ -114,19 +93,19 @@
                 },
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ardahost_nsg_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'ardahost-nic-nsg')]"
                 }
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_ardahost_ip_name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_ArdaDemo_vnet_name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_ardahost_nsg_name'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', 'ardahost-nic-ip')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', 'vnet')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'ardahost-nic-nsg')]"
             ]
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('networkSecurityGroups_ardahost_nsg_name')]",
+            "name": "ardahost-nic-nsg",
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -177,14 +156,14 @@
         },
         {
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('publicIPAddresses_ardahost_ip_name')]",
+            "name": "ardahost-nic-ip",
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
             "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4,
                 "dnsSettings": {
-                    "domainNameLabel": "[parameters('tdocker')]"
+                    "domainNameLabel": "[parameters('siteAddress')]"
                 }
             },
             "resources": [],
@@ -192,7 +171,7 @@
         },
         {
             "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('virtualNetworks_ArdaDemo_vnet_name')]",
+            "name": "vnet",
             "apiVersion": "2016-03-30",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -220,7 +199,7 @@
                 "tier": "Premium"
             },
             "kind": "Storage",
-            "name": "[variables('storageAccounts_ardademodisks376_name')]",
+            "name": "[variables('storageAccount')]",
             "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
             "tags": {},
