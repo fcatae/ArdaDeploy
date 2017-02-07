@@ -3,24 +3,15 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vmName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "ardahost"            
         },
         "location": {
-            "type": "string"
-        },
-        "fileUris": {
-            "type": "string"
-        },
-        "arguments": {
-            "type": "securestring",
-            "defaultValue": " "
+            "type": "string",
+            "defaultValue": "southcentralus"
         }
     },
     "variables": {
-        "UriFileNamePieces": "[split(parameters('fileUris'), '/')]",
-        "firstFileNameString": "[variables('UriFileNamePieces')[sub(length(variables('UriFileNamePieces')), 1)]]",
-        "firstFileNameBreakString": "[split(variables('firstFileNameString'), '?')]",
-        "firstFileName": "[variables('firstFileNameBreakString')[0]]"
     },
     "resources": [
         {
@@ -34,10 +25,13 @@
                 "typeHandlerVersion": "1.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "fileUris": "execute-compose.ps1"
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/execute-compose.ps1",
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/docker-compose.yml"
+                    ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat ('powershell -ExecutionPolicy Unrestricted -File ', variables('firstFileName'), ' ', parameters('arguments'))]"
+                    "commandToExecute": "[concat ('powershell -ExecutionPolicy Unrestricted -File execute-compose.ps1')]"
                 }
             }
         }
