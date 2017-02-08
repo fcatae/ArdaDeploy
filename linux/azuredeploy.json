@@ -13,20 +13,12 @@
         "siteAddress": {
             "defaultValue": "myardawebsite",
             "type": "String"
-        },
-        "selectOS": {
-            "allowedValues": [
-                "linux", "windows"
-            ],
-            "type": "String"
         }
     },
     "variables": {
         "vmName": "ardahost",
-        "os": "[parameters('selectOS')]",
-        "gitRepo": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/",
-        "templateVM": "[concat(variables('gitRepo'), variables('os'),'/vm.json')]",
-        "templateSetupDocker": "[concat(variables('gitRepo'), variables('os'),'/vmext.json')]"
+        "templateVM": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/linux/vm.json",
+        "templateSetupDocker": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/linux/vmext.json"
     },
     "resources": [
       {

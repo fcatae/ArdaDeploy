@@ -1,0 +1,52 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmName": {
+            "type": "string",
+            "defaultValue": "ardahost"            
+        }
+    },
+    "variables": {
+    },
+    "resources": [
+        {
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "name": "[concat(parameters('vmName'), '/DockerExtension')]",
+        "apiVersion": "2015-05-01-preview",
+        "location": "[resourceGroup().location]",
+        "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "DockerExtension",
+                "typeHandlerVersion": "1.1",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {}
+            }
+        },        
+        {
+            "name": "[concat(parameters('vmName'),'/CustomScript')]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'), 'DockerExtension')]"
+            ],
+            "apiVersion": "2015-06-15",
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/execute-compose.sh",
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/docker-compose.yml"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "./execute-compose.sh"
+                }
+            }
+        }
+    ]
+}

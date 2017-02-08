@@ -16,9 +16,10 @@
         }
     },
     "variables": {
+        "gitrepo": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/windows/",
         "vmName": "ardahost",
-        "templateVM": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/vm.json",
-        "templateSetupDocker": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/vmext.json"
+        "templateVM": "[concat(variables('gitrepo'), 'vm.json')]",
+        "templateSetupDocker": "[concat(variables('gitrepo'), 'vmext.json')]"
     },
     "resources": [
       {
