@@ -32,7 +32,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat(parameters('vmName'), '/DockerExtension')]"
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'), '/DockerExtension')]"
             ],
             "apiVersion": "2015-06-15",
             "properties": {
