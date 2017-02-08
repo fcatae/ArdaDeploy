@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUsername": {
+            "defaultValue": "ardaadmin",
+            "type": "String"
+        },      
+        "adminPassword": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "siteAddress": {
+            "defaultValue": "myardawebsite",
+            "type": "String"
+        }
+    },
+    "variables": {
+        "vmName": "ardahost",
+        "templateVM": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/vm.json",
+        "templateSetupDocker": "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/vmext.json"
+    },
+    "resources": [
+      {
+      "name": "vm",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+                "uri": "[variables('templateVM')]",
+                "contentVersion": "1.0.0.0"
+                },
+          "parameters": {
+                "adminUsername": {
+                  "value": "[parameters('adminUsername')]"
+                  },
+                "adminPassword": {
+                  "value": "[parameters('adminPassword')]"
+                  },
+                "siteAddress": {
+                  "value": "[parameters('siteAddress')]"
+                  },
+                "vmName": {
+                  "value": "[variables('vmName')]"
+                  }                  
+                }
+          }
+        
+      },
+      {
+            "name": "setupdocker",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [
+              "[concat('Microsoft.Resources/deployments/', 'vm')]"
+            ],
+            "properties": {
+                  "mode": "Incremental",
+                  "templateLink": {
+                        "uri": "[variables('templateSetupDocker')]",
+                        "contentVersion": "1.0.0.0"
+                      },
+                  "parameters": {
+                        "vmName": {
+                          "value": "[variables('vmName')]"
+                        }
+              }
+            }
+      }
+    ],      
+    "outputs": {
+        "website": {
+            "type": "string",            
+            "value": "[reference('vm').outputs.website.value]"
+        }
+    }
+}
