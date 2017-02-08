@@ -39,8 +39,8 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/execute-compose.sh",
-                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/docker-compose.yml"
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/linux/execute-compose.sh",
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/linux/docker-compose.yml"
                     ]
                 },
                 "protectedSettings": {
