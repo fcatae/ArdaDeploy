@@ -11,27 +11,27 @@
     },
     "resources": [
         {
-        "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(parameters('vmName'), '/DockerExtension')]",
-        "apiVersion": "2015-05-01-preview",
-        "location": "[resourceGroup().location]",
-        "dependsOn": [
-        ],
-        "properties": {
-            "publisher": "Microsoft.Azure.Extensions",
-            "type": "DockerExtension",
-            "typeHandlerVersion": "1.1",
-            "autoUpgradeMinorVersion": true,
-            "settings": {},
-            "protectedSettings": {}
-        }
-        },        
+        // "type": "Microsoft.Compute/virtualMachines/extensions",
+        // "name": "[concat(parameters('vmName'), '/DockerExtension')]",
+        // "apiVersion": "2015-05-01-preview",
+        // "location": "[resourceGroup().location]",
+        // "dependsOn": [
+        // ],
+        // "properties": {
+        //     "publisher": "Microsoft.Azure.Extensions",
+        //     "type": "DockerExtension",
+        //     "typeHandlerVersion": "1.1",
+        //     "autoUpgradeMinorVersion": true,
+        //     "settings": {},
+        //     "protectedSettings": {}
+        // }
+        // },        
         {
             "name": "[concat(parameters('vmName'),'/CustomScript')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'), 'DockerExtension')]"
+                //"[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'), 'DockerExtension')]"
             ],
             "apiVersion": "2015-06-15",
             "properties": {
