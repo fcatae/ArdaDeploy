@@ -23,7 +23,7 @@
                 "settings": {
                     "fileUris": [
                         "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/execute-compose.ps1",
-                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/docker-compose.yml"
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/windows/docker-compose.yml"
                     ]
                 },
                 "protectedSettings": {

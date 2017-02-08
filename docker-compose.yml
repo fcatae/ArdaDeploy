@@ -1,8 +1,8 @@
 version: '2.1'
 services:
-  main:
-     image: fcatae/ardafull-demo
-     command: run.cmd Arda.Main
+  ardamain:
+     image: fcatae/ardanix-demo
+     command: ./run.cmd Arda.Main
      ports:
         - "80:80"
         - "443:443"
@@ -10,43 +10,45 @@ services:
         - kanban
         - permissions
         - reports
-        - redis
-
+     networks: 
+        - ardanet                
   kanban:
-     image: fcatae/ardafull-demo
-     command: run.cmd Arda.Kanban
+     image: fcatae/ardanix-demo
+     command: ./run.cmd Arda.Kanban
      ports:
         - "81:81"
-     depends_on:
-        - sql
-
+     networks:
+        - ardanet     
   permissions:
-     image: fcatae/ardafull-demo
-     command: run.cmd Arda.Permissions
+     image: fcatae/ardanix-demo
+     command: ./run.cmd Arda.Permissions
      ports:
-        - "82:82"
-     depends_on:
-        - sql
-        - redis
-
+        - "82:82"  
+     networks:
+        - ardanet
   reports:
-     image: fcatae/ardafull-demo
-     command: run.cmd Arda.Reports
+     image: fcatae/ardanix-demo
+     command: ./run.cmd Arda.Reports
      ports:
         - "83:83"     
-     depends_on:
-        - kanban
-        - sql
-
+     networks:
+         - ardanet
   sql:
-     image: fcatae/ardasql
+     image: ardasqlnix
      ports:
-        - "1433:1433"
+       - "1433:1433"
+     networks:
+       - ardanet
   redis:
-     image: redis:3.2.100-nanoserver
-     ports:
-        - "6379:6379"
+     image: redis:3.2
+     ports: 
+       - "6379:6379"
+     networks:
+       ardanet:
+           ipv4_address: 172.20.100.100
 networks:
-  default:
-    external:
-      name: nat
+  ardanet:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16

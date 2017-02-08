@@ -1,0 +1,52 @@
+version: '2.1'
+services:
+  main:
+     image: fcatae/ardafull-demo
+     command: run.cmd Arda.Main
+     ports:
+        - "80:80"
+        - "443:443"
+     depends_on:
+        - kanban
+        - permissions
+        - reports
+        - redis
+
+  kanban:
+     image: fcatae/ardafull-demo
+     command: run.cmd Arda.Kanban
+     ports:
+        - "81:81"
+     depends_on:
+        - sql
+
+  permissions:
+     image: fcatae/ardafull-demo
+     command: run.cmd Arda.Permissions
+     ports:
+        - "82:82"
+     depends_on:
+        - sql
+        - redis
+
+  reports:
+     image: fcatae/ardafull-demo
+     command: run.cmd Arda.Reports
+     ports:
+        - "83:83"     
+     depends_on:
+        - kanban
+        - sql
+
+  sql:
+     image: fcatae/ardasql
+     ports:
+        - "1433:1433"
+  redis:
+     image: redis:3.2.100-nanoserver
+     ports:
+        - "6379:6379"
+networks:
+  default:
+    external:
+      name: nat

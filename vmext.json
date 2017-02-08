@@ -22,7 +22,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/execute-compose.ps1",
+                        "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/execute-compose.sh",
                         "https://raw.githubusercontent.com/DXBrazil/ArdaDeploy/master/docker-compose.yml"
                     ]
                 },
