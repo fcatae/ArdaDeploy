@@ -27,17 +27,17 @@
         }
         },        
         {
-            "name": "[concat(parameters('vmName'),'/CustomScriptExtension')]",
+            "name": "[concat(parameters('vmName'),'/CustomScriptForLinux')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/extensions/', parameters('vmName'), '/DockerExtension')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', parameters('vmName'), 'DockerExtension')]"
             ],
             "apiVersion": "2015-06-15",
             "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.7",
+                "publisher": "Microsoft.OSTCExtensions",
+                "type": "CustomScriptForLinux",
+                "typeHandlerVersion": "1.2",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
