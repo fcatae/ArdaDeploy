@@ -34,7 +34,7 @@ services:
      networks:
          - ardanet
   sql:
-     image: ardasqlnix
+     image: fcatae/ardasqlnix
      ports:
        - "1433:1433"
      networks:
