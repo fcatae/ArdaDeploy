@@ -34,11 +34,11 @@
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "Canonical",
-                        "offer": "UbuntuServer",
-                        "sku": "16.04-LTS",
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter-with-Containers",
                         "version": "latest"
-                    },                    
+                    },
                     "osDisk": {
                         "name": "ardahost-diskos",
                         "createOption": "FromImage",
@@ -52,6 +52,11 @@
                 "osProfile": {
                     "computerName": "ardahost",
                     "adminUsername": "[parameters('adminUsername')]",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
                     "adminPassword": "[parameters('adminPassword')]"
                 },
                 "networkProfile": {
@@ -111,11 +116,11 @@
             "properties": {
                 "securityRules": [
                     {
-                        "name": "default-allow-ssh",
+                        "name": "default-allow-rdp",
                         "properties": {
                             "protocol": "TCP",
                             "sourcePortRange": "*",
-                            "destinationPortRange": "22",
+                            "destinationPortRange": "3389",
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
