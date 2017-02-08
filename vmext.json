@@ -27,7 +27,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat ('powershell -ExecutionPolicy Unrestricted -File execute-compose.ps1')]"
+                    "commandToExecute": "/bin/sh execute-compose.sh"
                 }
             }
         }
