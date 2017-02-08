@@ -27,7 +27,7 @@
         }
         },        
         {
-            "name": "[concat(parameters('vmName'),'/CustomScriptForLinux')]",
+            "name": "[concat(parameters('vmName'),'/CustomScript')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "location": "[resourceGroup().location]",
             "dependsOn": [
@@ -35,9 +35,9 @@
             ],
             "apiVersion": "2015-06-15",
             "properties": {
-                "publisher": "Microsoft.OSTCExtensions",
-                "type": "CustomScriptForLinux",
-                "typeHandlerVersion": "1.2",
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
@@ -46,7 +46,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "/bin/sh execute-compose.sh"
+                    "commandToExecute": "./execute-compose.sh"
                 }
             }
         }
