@@ -1,46 +1,33 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "site_server": {
-            "defaultValue": "ardaweb-server",
-            "type": "String"
-        },
-        "site_name": {
-            "defaultValue": "arda-main",
-            "type": "String"
-        },
-
-        "repoURL": {
-            "type": "string",
-            "defaultValue": "https://github.com/DXBrazil/Arda.git",
-            "metadata": {
-                "description": "The URL for the GitHub repository that contains the project to deploy."
-            }
-        },
-        "branch": {
-            "type": "string",
-            "defaultValue": "master",
-            "metadata": {
-                "description": "The branch of the GitHub repository to use."
-            }
-        }
-
-    },
+    "parameters": {},
     "variables": {},
     "resources": [
 
-        {
-        "id": "/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ardateste8/providers/Microsoft.Web/sites/arda-main-teste8/config/appsettings",
-        "name": "appsettings",
-        "type": "Microsoft.Web/sites/config",
-        "location": "South Central US",
-        "tags": null,
-        "properties": {
-            "FABRICIO": "teste"
-        }
-        }
 
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "arda-main-teste8",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+
+            "resources": [{
+                    "type": "config",
+                    "name": "appsettings",
+                    "apiVersion": "2015-08-01",
+
+                    "properties": {
+                        "FABRICIO": "123"
+                    },
+
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', 'arda-main-teste8')]"
+                    ]                    
+                }],
+            
+            "properties": {}
+        }            
 
     ]
 }
