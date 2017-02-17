@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ardaweb_server": {
+            "defaultValue": "ardaweb-server",
+            "type": "String"
+        },
+        "site_name": {
+            "defaultValue": "arda-main",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app",
+            "name": "[parameters('ardaweb_server')]",
+            "apiVersion": "2015-08-01",
+            "location": "resourceGroup().location",
+            "properties": {
+                "name": "[parameters('ardaweb_server')]",
+                "numberOfWorkers": 1
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "app",
+            "name": "[parameters('site_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "resourceGroup().location",
+            "properties": {
+                "name": "[parameters('site_name')]",
+                "hostNames": [
+                    "arda-main.azurewebsites.net"
+                ],
+                "enabledHostNames": [
+                    "[concat(parameters('site_name'),'.azurewebsites.net')]",
+                    "[concat(parameters('site_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('site_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('site_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('ardaweb_server'))]"
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('ardaweb_server'))]"
+            ]
+        }
+    ]
+}
