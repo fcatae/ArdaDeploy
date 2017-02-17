@@ -29,90 +29,18 @@
     },
     "variables": {},
     "resources": [
+
         {
-            "type": "Microsoft.Web/serverfarms",
-            "sku": {
-                "name": "B1",
-                "tier": "Basic",
-                "size": "B1",
-                "family": "B",
-                "capacity": 1
-            },
-            "kind": "app",
-            "name": "[parameters('site_server')]",
-            "apiVersion": "2015-08-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "name": "[parameters('site_server')]",
-                "numberOfWorkers": 1
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "kind": "app",
-            "name": "[parameters('site_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "name": "[parameters('site_name')]",
-                "hostNames": [
-                    "[concat(parameters('site_name'),'.azurewebsites.net')]"
-                ],
-                "enabledHostNames": [
-                    "[concat(parameters('site_name'),'.azurewebsites.net')]",
-                    "[concat(parameters('site_name'),'.scm.azurewebsites.net')]"
-                ],
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('site_name'),'.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    },
-                    {
-                        "name": "[concat(parameters('site_name'),'.scm.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    }
-                ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('site_server'))]"
-            },
-
-            "resources": [
-                // {
-                // "apiVersion": "2015-08-01",
-                // "name": "site-sourcecode",
-                // "type": "sourcecontrols",
-                // "dependsOn": [
-                //     "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
-                // ],
-                // "properties": {
-                //     "RepoUrl": "[parameters('repoURL')]",
-                //     "branch": "[parameters('branch')]",
-                //     "IsManualIntegration": true
-                //     }
-                // },
-
-                {
-                "apiVersion": "2015-06-01",
-                "name": "site-config",
-                "type": "config",
-                "dependsOn": [
-                    "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
-                ],
-                "properties": {
-                    "SERVERSERVER123": "123"
-                    }
-                }
-
-            ],
-
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('site_server'))]"
-            ]
+        "id": "/subscriptions/9b3db624-2934-44c6-830f-9a17cb92cb4a/resourceGroups/ardateste8/providers/Microsoft.Web/sites/arda-main-teste8/config/appsettings",
+        "name": "appsettings",
+        "type": "Microsoft.Web/sites/config",
+        "location": "South Central US",
+        "tags": null,
+        "properties": {
+            "FABRICIO": "teste"
         }
+        }
+
+
     ]
 }
