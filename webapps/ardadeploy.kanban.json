@@ -89,7 +89,7 @@
             "resources": [
                 {
                 "type": "sourcecontrols",
-                "name": "site-sourcecode",
+                "name": "web",
                 "apiVersion": "2015-08-01",
                 "properties": {
                     "RepoUrl": "[parameters('repoURL')]",
@@ -97,7 +97,8 @@
                     "IsManualIntegration": true
                     },
                 "dependsOn": [
-                    "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
+                    "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]",
+                    "[resourceId('Microsoft.Web/Sites/config', parameters('site_name'), 'appsettings')]"
                     ]
                 },
 
