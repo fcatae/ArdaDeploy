@@ -87,19 +87,19 @@
             },
 
             "resources": [
-                // {
-                // "type": "sourcecontrols",
-                // "name": "site-sourcecode",
-                // "apiVersion": "2015-08-01",
-                // "properties": {
-                //     "RepoUrl": "[parameters('repoURL')]",
-                //     "branch": "[parameters('branch')]",
-                //     "IsManualIntegration": true
-                //     },
-                // "dependsOn": [
-                //     "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
-                // ]
-                // },
+                {
+                "type": "sourcecontrols",
+                "name": "site-sourcecode",
+                "apiVersion": "2015-08-01",
+                "properties": {
+                    "RepoUrl": "[parameters('repoURL')]",
+                    "branch": "[parameters('branch')]",
+                    "IsManualIntegration": true
+                    },
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
+                    ]
+                },
 
                 {
                     "type": "config",
@@ -107,7 +107,7 @@
                     "apiVersion": "2015-08-01",
 
                     "properties": {
-                        "FABRICIO": "123-Kanban"
+                        "PROJECT": "src\\Arda.Kanban"
                     },
 
                     "dependsOn": [
