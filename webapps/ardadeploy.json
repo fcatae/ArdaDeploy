@@ -94,7 +94,34 @@
                     "branch": "[parameters('branch')]",
                     "IsManualIntegration": true
                 }
+                },
+
+                {
+                "apiVersion": "2015-06-01",
+                "name": "web",
+                "type": "config",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
+                ],
+                "properties": {
+                    "phpVersion": "off",
+                    "netFrameworkVersion": "v4.5",
+                    "use32BitWorkerProcess": "false",
+                    "webSocketsEnabled": true,
+                    "alwaysOn": "true",
+                    "requestTracingEnabled": false,
+                    "httpLoggingEnabled": true,
+                    "logsDirectorySizeLimit": 40,
+                    "detailedErrorLoggingEnabled": true,
+                    "appSettings": [
+                    {
+                        "Name": "SCM_SITEEXTENSIONS_FEED_URL",
+                        "Value": "http://www.siteextensions.net/api/v2/"
+                    }
+                    ]
                 }
+                }        
+
             ],
 
             "dependsOn": [
