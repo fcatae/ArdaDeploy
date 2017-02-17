@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "site_server": {
+            "defaultValue": "ardaweb-server",
+            "type": "string"
+        },
+        "site_name": {
+            "defaultValue": "ardawebsite",
+            "type": "string"
+        },
+
+        "repoURL": {
+            "type": "string",
+            "defaultValue": "https://github.com/DXBrazil/Arda.git",
+            "metadata": {
+                "description": "The URL for the GitHub repository that contains the project to deploy."
+            }
+        },
+        "branch": {
+            "type": "string",
+            "defaultValue": "master",
+            "metadata": {
+                "description": "The branch of the GitHub repository to use."
+            }
+        }
+
+    },
+    "variables": {
+        "resource_web_URL": "[concat(parameters('site_name'),'.azurewebsites.net')]",
+        "resource_scm_URL": "[concat(parameters('site_name'),'.scm.azurewebsites.net')]"
+    },
+
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "name": "[parameters('site_server')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "app",
+            "properties": {
+                "name": "[parameters('site_server')]",
+                "numberOfWorkers": 1
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('site_name')]",
+            "apiVersion": "2015-08-01",            
+            "location": "[resourceGroup().location]",
+            "kind": "app",
+            "properties": {
+                "name": "[parameters('site_name')]",
+                "hostNames": [
+                    "[variables('resource_web_URL')]"
+                ],
+                "enabledHostNames": [
+                    "[variables('resource_web_URL')]",
+                    "[variables('resource_scm_URL')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[variables('resource_web_URL')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[variables('resource_scm_URL')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('site_server'))]"
+            },
+
+            "resources": [
+                // {
+                // "type": "sourcecontrols",
+                // "name": "site-sourcecode",
+                // "apiVersion": "2015-08-01",
+                // "properties": {
+                //     "RepoUrl": "[parameters('repoURL')]",
+                //     "branch": "[parameters('branch')]",
+                //     "IsManualIntegration": true
+                //     },
+                // "dependsOn": [
+                //     "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
+                // ]
+                // },
+
+                {
+                    "type": "config",
+                    "name": "appsettings",
+                    "apiVersion": "2015-08-01",
+
+                    "properties": {
+                        "FABRICIO": "123-Kanban"
+                    },
+
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('site_name'))]"
+                    ] 
+                }
+            ],
+
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('site_server'))]"
+            ]
+        }
+    ]
+}
