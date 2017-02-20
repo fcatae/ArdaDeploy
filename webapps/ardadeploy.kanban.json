@@ -109,6 +109,7 @@
 
                     "properties": {
                         "PROJECT": "src\\Arda.Kanban"
+                        // "NUGET_PACKAGES": "d:\\local\\.nuget\\packages"
                     },
 
                     "dependsOn": [
