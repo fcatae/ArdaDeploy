@@ -1,0 +1,112 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "site_server": {
+            "defaultValue": "ardaweb-server",
+            "type": "string"
+        },
+        "site_name_prefix": {
+            "defaultValue": "ardawebsite",
+            "type": "string"
+        },
+        "ardaProject": {
+            "allowedValues": ["Main"],                
+            "type": "string"
+        },
+        "endpointKanban": {
+            "defaultValue": "http://arda-kanban-service.azurewebsites.net",
+            "type": "string"
+        },
+        "endpointPermissions": {
+            "defaultValue": "http://arda-permissions-service.azurewebsites.net",
+            "type": "string"
+        },
+        "endpointReports": {
+            "defaultValue": "http://arda-reports-service.azurewebsites.net",
+            "type": "string"
+        },
+        "appInsights": {
+            "defaultValue": "<appkey>",
+            "type": "string"
+        }
+    },
+    "variables": {
+        "site_name": "[concat(parameters('site_name_prefix'), '-', parameters('ardaProject'))]",
+        "project_path": "[concat('src\\Arda.', parameters('ardaProject'))]",
+        "project_repository": "https://github.com/DXBrazil/Arda.git",
+        "project_repository_branch": "master",
+        "resource_web_URL": "[concat(variables('site_name'),'.azurewebsites.net')]",
+        "resource_scm_URL": "[concat(variables('site_name'),'.scm.azurewebsites.net')]"
+    },
+
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('site_name')]",
+            "apiVersion": "2015-08-01",            
+            "location": "[resourceGroup().location]",
+            "kind": "app",
+            "properties": {
+                "name": "[variables('site_name')]",
+                "hostNames": [
+                    "[variables('resource_web_URL')]"
+                ],
+                "enabledHostNames": [
+                    "[variables('resource_web_URL')]",
+                    "[variables('resource_scm_URL')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[variables('resource_web_URL')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[variables('resource_scm_URL')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[reference(concat('Microsoft.Web/serverfarms/', parameters('site_server')), '2015-08-01')]"
+            },
+
+            "resources": [
+                {
+                "type": "sourcecontrols",
+                "name": "web",
+                "apiVersion": "2015-08-01",
+                "properties": {
+                    "RepoUrl": "[variables('project_repository')]",
+                    "branch": "[variables('project_repository_branch')]",
+                    "IsManualIntegration": true
+                    },
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites', variables('site_name'))]",
+                    "[resourceId('Microsoft.Web/Sites/config', variables('site_name'), 'appsettings')]"
+                    ]
+                },
+
+                {
+                    "type": "config",
+                    "name": "appsettings",
+                    "apiVersion": "2015-08-01",
+
+                    "properties": {
+                        "PROJECT": "[variables('project_path')]",
+                        "Endpoints:kanban-service": "[parameters('endpointKanban')]",
+                        "Endpoints:permissions-service": "[parameters('endpointPermissions')]",
+                        "Endpoints:reports-service": "[parameters('endpointReports')]",
+                        "ApplicationInsights:InstrumentationKey": "[parameters('appInsights')]"
+                    },
+
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('site_name'))]"
+                    ] 
+                }
+            ]
+        }
+    ]
+}
