@@ -15,19 +15,19 @@
             "type": "string"
         },
         "endpointKanban": {
-            "defaultValue": "http://arda-kanban-service.azurewebsites.net",
+            "defaultValue": "http://arda-kanban-service.azurewebsites.net/",
             "type": "string"
         },
         "endpointPermissions": {
-            "defaultValue": "http://arda-permissions-service.azurewebsites.net",
+            "defaultValue": "http://arda-permissions-service.azurewebsites.net/",
             "type": "string"
         },
         "endpointReports": {
-            "defaultValue": "http://arda-reports-service.azurewebsites.net",
+            "defaultValue": "http://arda-reports-service.azurewebsites.net/",
             "type": "string"
         },
         "appInsights": {
-            "defaultValue": "<appkey>",
+            "defaultValue": "",
             "type": "string"
         }
     },
