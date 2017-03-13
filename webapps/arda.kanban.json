@@ -11,9 +11,13 @@
             "type": "string"
         },
         "storageSql_default": {
-            "defaultValue": "Server=tcp:<sqldb>.database.windows.net,1433;User ID=<user>;Initial Catalog=Arda_Kanban;Persist Security Info=False;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+            "defaultValue": "Server=tcp:arda.database.windows.net,1433;User ID=arda_sa;Initial Catalog=<database>;Persist Security Info=False;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
             "type": "string"
         },
+        "storageSqlDatabase": {
+            "defaultValue": "Arda_Kanban",
+            "type": "string"
+        },        
         "storageSqlPassword": {
             "type": "securestring"
         },        
@@ -27,7 +31,9 @@
         "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver')]",
         "site_name_prefix": "[replace(parameters('site_name_prefix'), '<random>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
 
-        "storageSql": "[replace(parameters('storageSql_default'), '<default>', parameters('storageSqlPassword'))]",
+        "storageSql_p1": "[replace(parameters('storageSql_default'), '<password>', parameters('storageSqlPassword'))]",
+        "storageSql_p0": "[replace(parameters('storageSql_p1'), '<database>', parameters('storageSqlDatabase'))]",
+        "storageSql": "[variables('storageSql_p0')]",
 
         "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
         "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
@@ -78,7 +84,7 @@
                 "properties": {
                     "RepoUrl": "[variables('project_repository')]",
                     "branch": "[variables('project_repository_branch')]",
-                    "IsManualIntegration": false                    
+                    "IsManualIntegration": true                    
                     },
                 "dependsOn": [
                     "[resourceId('Microsoft.Web/Sites', variables('site_name'))]",
