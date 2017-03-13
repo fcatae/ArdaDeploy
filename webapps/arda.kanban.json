@@ -21,9 +21,9 @@
     },
     "variables": {
         "ardaProject": "Kanban",
-        "site_server": "[replace(parameters('site_server'),'<default>',resourceGroup().name)]",
-        "site_name_prefix": "[replace(parameters('site_name_prefix'),'<default>',resourceGroup().name)]",
-        
+        "site_server": "[replace(parameters('site_server'), '<default>', resourceGroup().name)]",
+        "site_name_prefix": "[replace(parameters('site_name_prefix'), '<default>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
+
         "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
         "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
         "project_repository": "https://github.com/DXBrazil/Arda.git",
