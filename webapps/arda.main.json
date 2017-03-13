@@ -3,11 +3,11 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "site_server_default": {
-            "defaultValue": "ardaweb-server",
+            "defaultValue": "<default>",
             "type": "string"
         },
         "site_name_prefix_default": {
-            "defaultValue": "ardawebsite",
+            "defaultValue": "<random>",
             "type": "string"
         },
         "endpointKanban_default": {
@@ -15,11 +15,11 @@
             "type": "string"
         },
         "endpointPermissions_default": {
-            "defaultValue": "http://arda-permissions-service.azurewebsites.net/",
+            "defaultValue": "<default>",
             "type": "string"
         },
         "endpointReports_default": {
-            "defaultValue": "http://arda-reports-service.azurewebsites.net/",
+            "defaultValue": "<default>",
             "type": "string"
         },
         "appInsights": {
