@@ -89,7 +89,9 @@
                 "properties": {
                     "RepoUrl": "[variables('project_repository')]",
                     "branch": "[variables('project_repository_branch')]",
-                    "IsManualIntegration": true
+                    "IsManualIntegration": true,
+                    "deploymentRollbackEnabled": false,
+                    "isMercurial": false
                     },
                 "dependsOn": [
                     "[resourceId('Microsoft.Web/Sites', variables('site_name'))]",
