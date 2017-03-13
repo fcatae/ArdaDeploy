@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "site_server": {
+        "site_server_default": {
             "defaultValue": "<default>",
             "type": "string"
         },
@@ -10,10 +10,14 @@
             "defaultValue": "<default>",
             "type": "string"
         },
-        "storageSql": {
-            "defaultValue": "Server=tcp:<sqldb>.database.windows.net,1433;Initial Catalog=Arda_Kanban;Persist Security Info=False;User ID=<user>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-            "type": "securestring"
+        "storageSql_default": {
+            "defaultValue": "Server=tcp:<sqldb>.database.windows.net,1433;User ID=<user>;Initial Catalog=Arda_Kanban;Persist Security Info=False;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+            "type": "string"
         },
+        "storageSqlPassword": {
+            "defaultValue": "",
+            "type": "securestring"
+        },        
         "appInsights": {
             "defaultValue": "",
             "type": "securestring"
@@ -21,8 +25,10 @@
     },
     "variables": {
         "ardaProject": "Kanban",
-        "site_server": "[replace(parameters('site_server'), '<default>', resourceGroup().name)]",
+        "site_server": "[replace(parameters('site_server_default'), '<default>', resourceGroup().name)]",
         "site_name_prefix": "[replace(parameters('site_name_prefix'), '<default>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
+
+        "storageSql": "[replace(parameters('storageSql_default'), '<default>', variables('storageSqlPassword'))]",
 
         "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
         "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
@@ -62,7 +68,7 @@
                         "ipBasedSslState": 0
                     }
                 ],
-                "serverFarmId": "[reference(concat('Microsoft.Web/serverfarms/', parameters('site_server')), '2015-08-01')]"
+                "serverFarmId": "[reference(concat('Microsoft.Web/serverfarms/', variables('site_server')), '2015-08-01')]"
             },
 
             "resources": [
@@ -88,7 +94,7 @@
 
                     "properties": {
                         "PROJECT": "[variables('project_path')]",
-                        "Storage:SqlServer-Kanban:ConnectionString": "[parameters('storageSql')]",
+                        "Storage:SqlServer-Kanban:ConnectionString": "[variables('storageSql')]",
                         "ApplicationInsights:InstrumentationKey": "[parameters('appInsights')]"
                     },
 
