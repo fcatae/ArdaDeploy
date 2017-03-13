@@ -1,0 +1,120 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "site_server_default": {
+            "defaultValue": "<default>",
+            "type": "string"
+        },
+        "site_name_prefix": {
+            "defaultValue": "<random>",
+            "type": "string"
+        },
+        "storageSql_default": {
+            "defaultValue": "Server=tcp:<sqldb>.database.windows.net,1433;User ID=arda_sa;Initial Catalog=<database>;Persist Security Info=False;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+            "type": "string"
+        },
+        "storageSqlServer": {
+            "defaultValue": "arda",
+            "type": "string"
+        },        
+        "storageSqlDatabase": {
+            "defaultValue": "Arda_Permissions",
+            "type": "string"
+        },        
+        "storageSqlPassword": {
+            "type": "securestring"
+        },        
+        "appInsights": {
+            "defaultValue": "",
+            "type": "securestring"
+        }
+    },
+    "variables": {
+        "ardaProject": "Permissions",
+        "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver')]",
+        "site_name_prefix": "[replace(parameters('site_name_prefix'), '<random>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
+
+        "storageSql_p2": "[replace(parameters('storageSql_default'), '<password>', parameters('storageSqlPassword'))]",
+        "storageSql_p1": "[replace(variables('storageSql_p2'), '<sqldb>', parameters('storageSqlServer'))]",
+        "storageSql_p0": "[replace(variables('storageSql_p1'), '<database>', parameters('storageSqlDatabase'))]",
+        "storageSql": "[variables('storageSql_p0')]",
+
+        "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
+        "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
+        "project_repository": "https://github.com/DXBrazil/Arda.git",
+        "project_repository_branch": "master",
+        "resource_web_URL": "[concat(variables('site_name'),'.azurewebsites.net')]",
+        "resource_scm_URL": "[concat(variables('site_name'),'.scm.azurewebsites.net')]"
+    },
+
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('site_name')]",
+            "apiVersion": "2015-08-01",            
+            "location": "[resourceGroup().location]",
+            "kind": "app",
+            "properties": {
+                "name": "[variables('site_name')]",
+                "hostNames": [
+                    "[variables('resource_web_URL')]"
+                ],
+                "enabledHostNames": [
+                    "[variables('resource_web_URL')]",
+                    "[variables('resource_scm_URL')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[variables('resource_web_URL')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[variables('resource_scm_URL')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[reference(concat('Microsoft.Web/serverfarms/', variables('site_server')), '2015-08-01')]"
+            },
+
+            "resources": [
+                {
+                "type": "sourcecontrols",
+                "name": "web",
+                "apiVersion": "2015-08-01",
+                "properties": {
+                    "RepoUrl": "[variables('project_repository')]",
+                    "branch": "[variables('project_repository_branch')]",
+                    "IsManualIntegration": true                    
+                    },
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/Sites', variables('site_name'))]",
+                    "[resourceId('Microsoft.Web/Sites/config', variables('site_name'), 'appsettings')]"
+                    ]
+                },
+
+                {
+                    "type": "config",
+                    "name": "appsettings",
+                    "apiVersion": "2015-08-01",
+
+                    "properties": {
+                        "PROJECT": "[variables('project_path')]",
+                        "Storage:SqlServer-Permissions:ConnectionString": "[variables('storageSql')]",
+                        "ApplicationInsights:InstrumentationKey": "[parameters('appInsights')]",
+                        "Storage:Redis:Configuration": "<redis_server>:6380,password=<redis_password>,ssl=True,abortConnect=False",
+                        "Storage:Redis:InstanceName": "arda.redis"
+                    },
+
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('site_name'))]"
+                    ] 
+                }
+            ]
+        }
+    ]
+}
