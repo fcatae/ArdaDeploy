@@ -3,15 +3,17 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "site_server": {
-            "defaultValue": "ardaweb-server",
+            "defaultValue": "<default>",
             "type": "string"
         }
     },
-
+    "variables": {
+        "site_server": "[replace(parameters('site_server'),'<default>',resourceGroup().name)]"
+    },
     "resources": [
         {
             "type": "Microsoft.Web/serverfarms",
-            "name": "[parameters('site_server')]",
+            "name": "[variables('site_server')]",
             "apiVersion": "2015-08-01",
             "location": "[resourceGroup().location]",
             "sku": {

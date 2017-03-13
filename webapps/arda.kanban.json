@@ -3,33 +3,28 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "site_server": {
-            "defaultValue": "[resourceGroup().name]",
+            "defaultValue": "<default>",
             "type": "string"
         },
         "site_name_prefix": {
-            "defaultValue": "[resourceGroup().name]",
+            "defaultValue": "<default>",
             "type": "string"
         },
-        "endpointKanban": {
-            "defaultValue": "http://arda-kanban-service.azurewebsites.net/",
-            "type": "string"
-        },
-        "endpointPermissions": {
-            "defaultValue": "http://arda-permissions-service.azurewebsites.net/",
-            "type": "string"
-        },
-        "endpointReports": {
-            "defaultValue": "http://arda-reports-service.azurewebsites.net/",
-            "type": "string"
+        "storageSql": {
+            "defaultValue": "Server=tcp:<sqldb>.database.windows.net,1433;Initial Catalog=Arda_Kanban;Persist Security Info=False;User ID=<user>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+            "type": "securestring"
         },
         "appInsights": {
             "defaultValue": "",
-            "type": "string"
+            "type": "securestring"
         }
     },
     "variables": {
-        "ardaProject": "Main",
-        "site_name": "[concat(parameters('site_name_prefix'), '-', variables('ardaProject'))]",
+        "ardaProject": "Kanban",
+        "site_server": "[replace(parameters('site_server'),'<default>',resourceGroup().name)]",
+        "site_name_prefix": "[replace(parameters('site_name_prefix'),'<default>',resourceGroup().name)]",
+        
+        "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
         "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
         "project_repository": "https://github.com/DXBrazil/Arda.git",
         "project_repository_branch": "master",
@@ -93,7 +88,7 @@
 
                     "properties": {
                         "PROJECT": "[variables('project_path')]",
-                        "Storage:SqlServer-Kanban:ConnectionString": "Server=tcp:<sqldb>.database.windows.net,1433;Initial Catalog=Arda_Kanban;Persist Security Info=False;User ID=<user>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+                        "Storage:SqlServer-Kanban:ConnectionString": "[parameters('storageSql')]",
                         "ApplicationInsights:InstrumentationKey": "[parameters('appInsights')]"
                     },
 
