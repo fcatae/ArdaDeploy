@@ -7,7 +7,7 @@
             "type": "string"
         },
         "site_name_prefix": {
-            "defaultValue": "<default>",
+            "defaultValue": "<random>",
             "type": "string"
         },
         "storageSql_default": {
@@ -25,10 +25,10 @@
     },
     "variables": {
         "ardaProject": "Kanban",
-        "site_server": "[replace(parameters('site_server_default'), '<default>', resourceGroup().name)]",
-        "site_name_prefix": "[replace(parameters('site_name_prefix'), '<default>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
+        "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver-backend')]",
+        "site_name_prefix": "[replace(parameters('site_name_prefix'), '<random>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
 
-        "storageSql": "[replace(parameters('storageSql_default'), '<default>', variables('storageSqlPassword'))]",
+        "storageSql": "[replace(parameters('storageSql_default'), '<default>', parameters('storageSqlPassword'))]",
 
         "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
         "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
