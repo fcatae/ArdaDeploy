@@ -2,27 +2,23 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "site_server": {
+        "site_server_default": {
             "defaultValue": "ardaweb-server",
             "type": "string"
         },
-        "site_name_prefix": {
+        "site_name_prefix_default": {
             "defaultValue": "ardawebsite",
             "type": "string"
         },
-        "ardaProject": {
-            "allowedValues": ["Main"],                
+        "endpointKanban_default": {
+            "defaultValue": "<default>",
             "type": "string"
         },
-        "endpointKanban": {
-            "defaultValue": "http://arda-kanban-service.azurewebsites.net/",
-            "type": "string"
-        },
-        "endpointPermissions": {
+        "endpointPermissions_default": {
             "defaultValue": "http://arda-permissions-service.azurewebsites.net/",
             "type": "string"
         },
-        "endpointReports": {
+        "endpointReports_default": {
             "defaultValue": "http://arda-reports-service.azurewebsites.net/",
             "type": "string"
         },
@@ -32,8 +28,20 @@
         }
     },
     "variables": {
-        "site_name": "[concat(parameters('site_name_prefix'), '-', parameters('ardaProject'))]",
-        "project_path": "[concat('src\\Arda.', parameters('ardaProject'))]",
+        "ardaProject": "Main",
+        "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver')]",
+        "site_name_prefix": "[replace(parameters('site_name_prefix_default'), '<random>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
+
+        "site_name": "[concat(variables('site_name_prefix'), '-', variables('ardaProject'))]",
+        "endpoint_name_kanban": "[concat('http://', variables('site_name_prefix'), '-kanban.azurewebsites.net/')]",
+        "endpoint_name_permissions": "[concat('http://', variables('site_name_prefix'), '-permissions.azurewebsites.net/')]",
+        "endpoint_name_reports": "[concat('http://', variables('site_name_prefix'), '-reports.azurewebsites.net/')]",
+
+        "endpointKanban": "[replace(parameters('endpointKanban_default'), '<default>', variables('endpoint_name_kanban'))]",
+        "endpointPermissions": "[replace(parameters('endpointPermissions_default'), '<default>', variables('endpoint_name_permissions'))]",
+        "endpointReports": "[replace(parameters('endpointReports_default'), '<default>', variables('endpoint_name_reports'))]",
+
+        "project_path": "[concat('src\\Arda.', variables('ardaProject'))]",
         "project_repository": "https://github.com/DXBrazil/Arda.git",
         "project_repository_branch": "master",
         "resource_web_URL": "[concat(variables('site_name'),'.azurewebsites.net')]",
@@ -96,9 +104,9 @@
 
                     "properties": {
                         "PROJECT": "[variables('project_path')]",
-                        "Endpoints:kanban-service": "[parameters('endpointKanban')]",
-                        "Endpoints:permissions-service": "[parameters('endpointPermissions')]",
-                        "Endpoints:reports-service": "[parameters('endpointReports')]",
+                        "Endpoints:kanban-service": "[variables('endpointKanban')]",
+                        "Endpoints:permissions-service": "[variables('endpointPermissions')]",
+                        "Endpoints:reports-service": "[variables('endpointReports')]",
                         "ApplicationInsights:InstrumentationKey": "[parameters('appInsights')]"
                     },
 
