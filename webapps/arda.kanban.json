@@ -25,7 +25,7 @@
     },
     "variables": {
         "ardaProject": "Kanban",
-        "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver-backend')]",
+        "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver')]",
         "site_name_prefix": "[replace(parameters('site_name_prefix'), '<random>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
 
         "storageSql": "[replace(parameters('storageSql_default'), '<default>', parameters('storageSqlPassword'))]",

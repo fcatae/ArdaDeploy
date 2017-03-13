@@ -8,7 +8,7 @@
         }
     },
     "variables": {
-        "site_server": "[replace(parameters('site_server_default'),'<default>', 'ardaserver-backend')]"
+        "site_server": "[replace(parameters('site_server_default'),'<default>', 'ardaserver')]"
     },
     "resources": [
         {
