@@ -78,7 +78,7 @@
                         "ipBasedSslState": 0
                     }
                 ],
-                "serverFarmId": "[reference(concat('Microsoft.Web/serverfarms/', parameters('site_server')), '2015-08-01')]"
+                "serverFarmId": "[reference(concat('Microsoft.Web/serverfarms/', variables('site_server')), '2015-08-01')]"
             },
 
             "resources": [
