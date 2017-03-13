@@ -11,9 +11,13 @@
             "type": "string"
         },
         "storageSql_default": {
-            "defaultValue": "Server=tcp:arda.database.windows.net,1433;User ID=<user>;Initial Catalog=<database>;Persist Security Info=False;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+            "defaultValue": "Server=tcp:<sqldb>.database.windows.net,1433;User ID=arda_sa;Initial Catalog=<database>;Persist Security Info=False;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
             "type": "string"
         },
+        "storageSqlServer": {
+            "defaultValue": "arda",
+            "type": "string"
+        },        
         "storageSqlDatabase": {
             "defaultValue": "Arda_Kanban",
             "type": "string"
@@ -31,7 +35,8 @@
         "site_server": "[replace(parameters('site_server_default'), '<default>', 'ardaserver')]",
         "site_name_prefix": "[replace(parameters('site_name_prefix'), '<random>', concat('arda-',uniqueString(resourceGroup().id)) )]",        
 
-        "storageSql_p1": "[replace(parameters('storageSql_default'), '<password>', parameters('storageSqlPassword'))]",
+        "storageSql_p2": "[replace(parameters('storageSql_default'), '<password>', parameters('storageSqlPassword'))]",
+        "storageSql_p1": "[replace(variables('storageSql_p2'), '<sqldb>', parameters('storageSqlServer'))]",
         "storageSql_p0": "[replace(variables('storageSql_p1'), '<database>', parameters('storageSqlDatabase'))]",
         "storageSql": "[variables('storageSql_p0')]",
 
